@@ -1,10 +1,17 @@
 import SwiftUI
 
 @main
+@MainActor
 struct CalendarPulseApp: App {
-    @StateObject private var settings = AppSettings.shared
-    @StateObject private var viewModel = CalendarViewModel(settings: AppSettings.shared)
+    @StateObject private var settings: AppSettings
+    @StateObject private var viewModel: CalendarViewModel
     @Environment(\.scenePhase) private var scenePhase
+
+    init() {
+        let settings = AppSettings.shared
+        _settings = StateObject(wrappedValue: settings)
+        _viewModel = StateObject(wrappedValue: CalendarViewModel(settings: settings))
+    }
 
     var body: some Scene {
         MenuBarExtra {

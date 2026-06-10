@@ -86,7 +86,7 @@ final class CalendarService {
         let predicate = eventStore.predicateForEvents(withStart: start, end: end, calendars: calendars)
         let events = eventStore.events(matching: predicate)
             .filter { event in
-                event.participationStatus != .declined
+                !isDeclinedByCurrentUser(event)
             }
             .map(mapEvent)
             .sorted { lhs, rhs in
@@ -97,8 +97,8 @@ final class CalendarService {
             }
 
         return CalendarDaySnapshot(
-            timedEvents: events.filter { !$0.isAllDay },
-            allDayEvents: events.filter(\.isAllDay)
+            timedEvents: events.filter { event in !event.isAllDay },
+            allDayEvents: events.filter { event in event.isAllDay }
         )
     }
 
@@ -116,6 +116,12 @@ final class CalendarService {
             ?? URL(string: "x-apple.systempreferences:com.apple.preference.security")!
         NSWorkspace.shared.open(url)
 #endif
+    }
+
+    private func isDeclinedByCurrentUser(_ event: EKEvent) -> Bool {
+        event.attendees?.contains { participant in
+            participant.isCurrentUser && participant.participantStatus == EKParticipantStatus.declined
+        } ?? false
     }
 
     private func mapEvent(_ event: EKEvent) -> CalendarEvent {
