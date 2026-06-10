@@ -11,6 +11,9 @@ struct MenuBarStatusView: View {
             Image(systemName: viewModel.status.symbolName)
                 .foregroundStyle(viewModel.status.color)
         }
+        .symbolEffect(.pulse, isActive: viewModel.isNudgeAnimating)
+        .opacity(viewModel.isNudgeAnimating ? 0.88 : 1)
+        .animation(.easeInOut(duration: 0.7).repeatCount(5, autoreverses: true), value: viewModel.isNudgeAnimating)
         .help(viewModel.status.title)
     }
 }

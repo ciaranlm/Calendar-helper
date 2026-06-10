@@ -14,6 +14,8 @@
 		10000000000000000000000F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10000000000000000000000E /* SettingsView.swift */; };
 		100000000000000000000011 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000010 /* AppSettings.swift */; };
 		100000000000000000000013 /* LaunchAtLoginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000012 /* LaunchAtLoginManager.swift */; };
+		100000000000000000000015 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000014 /* NotificationManager.swift */; };
+		100000000000000000000017 /* MeetingNudgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* MeetingNudgeManager.swift */; };
 		100000000000000000000100 /* Calendar Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Calendar Pulse.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		100000000000000000000101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		100000000000000000000000 /* CalendarPulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPulseApp.swift; sourceTree = "<group>"; };
@@ -26,6 +28,8 @@
 		10000000000000000000000E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		100000000000000000000010 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		100000000000000000000012 /* LaunchAtLoginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginManager.swift; sourceTree = "<group>"; };
+		100000000000000000000014 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		100000000000000000000016 /* MeetingNudgeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingNudgeManager.swift; sourceTree = "<group>"; };
 		100000000000000000000110 /* Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		100000000000000000000120 /* CalendarPulse */ = {
 			isa = PBXGroup;
@@ -40,6 +44,8 @@
 				10000000000000000000000E /* SettingsView.swift */,
 				100000000000000000000010 /* AppSettings.swift */,
 				100000000000000000000012 /* LaunchAtLoginManager.swift */,
+				100000000000000000000014 /* NotificationManager.swift */,
+				100000000000000000000016 /* MeetingNudgeManager.swift */,
 				100000000000000000000101 /* Info.plist */,
 			);
 			path = CalendarPulse;
@@ -112,6 +118,8 @@
 				10000000000000000000000F /* SettingsView.swift in Sources */,
 				100000000000000000000011 /* AppSettings.swift in Sources */,
 				100000000000000000000013 /* LaunchAtLoginManager.swift in Sources */,
+				100000000000000000000015 /* NotificationManager.swift in Sources */,
+				100000000000000000000017 /* MeetingNudgeManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,18 @@ final class AppSettings: ObservableObject {
         didSet { defaults.set(refreshIntervalSeconds, forKey: Keys.refreshIntervalSeconds) }
     }
 
+    @Published var meetingNudgesEnabled: Bool {
+        didSet { defaults.set(meetingNudgesEnabled, forKey: Keys.meetingNudgesEnabled) }
+    }
+
+    @Published var nudgeTimeMinutes: Int {
+        didSet { defaults.set(nudgeTimeMinutes, forKey: Keys.nudgeTimeMinutes) }
+    }
+
+    @Published var playNudgeSound: Bool {
+        didSet { defaults.set(playNudgeSound, forKey: Keys.playNudgeSound) }
+    }
+
     private let defaults: UserDefaults
 
     private enum Keys {
@@ -33,6 +45,9 @@ final class AppSettings: ObservableObject {
         static let includeAllDayEventsInList = "includeAllDayEventsInList"
         static let showEventTitlesInMenuBar = "showEventTitlesInMenuBar"
         static let refreshIntervalSeconds = "refreshIntervalSeconds"
+        static let meetingNudgesEnabled = "meetingNudgesEnabled"
+        static let nudgeTimeMinutes = "nudgeTimeMinutes"
+        static let playNudgeSound = "playNudgeSound"
     }
 
     private init(defaults: UserDefaults = .standard) {
@@ -42,6 +57,9 @@ final class AppSettings: ObservableObject {
         self.includeAllDayEventsInList = defaults.object(forKey: Keys.includeAllDayEventsInList) as? Bool ?? true
         self.showEventTitlesInMenuBar = defaults.object(forKey: Keys.showEventTitlesInMenuBar) as? Bool ?? false
         self.refreshIntervalSeconds = defaults.object(forKey: Keys.refreshIntervalSeconds) as? Int ?? 60
+        self.meetingNudgesEnabled = defaults.object(forKey: Keys.meetingNudgesEnabled) as? Bool ?? true
+        self.nudgeTimeMinutes = defaults.object(forKey: Keys.nudgeTimeMinutes) as? Int ?? 1
+        self.playNudgeSound = defaults.object(forKey: Keys.playNudgeSound) as? Bool ?? false
     }
 
     var workdayStartDate: Date {
@@ -87,6 +105,26 @@ enum RefreshInterval: Int, CaseIterable, Identifiable {
             return "60 seconds"
         case .fiveMinutes:
             return "5 minutes"
+        }
+    }
+}
+
+
+enum NudgeTime: Int, CaseIterable, Identifiable {
+    case oneMinute = 1
+    case twoMinutes = 2
+    case fiveMinutes = 5
+
+    var id: Int { rawValue }
+
+    var title: String {
+        switch self {
+        case .oneMinute:
+            return "1 minute before"
+        case .twoMinutes:
+            return "2 minutes before"
+        case .fiveMinutes:
+            return "5 minutes before"
         }
     }
 }
