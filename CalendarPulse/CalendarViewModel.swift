@@ -46,10 +46,10 @@ final class CalendarViewModel: ObservableObject {
     private var nudgeStatusOverride: Status?
     private var nudgeAnimationTask: Task<Void, Never>?
 
-    init(service: CalendarService = CalendarService(), settings: AppSettings? = nil, nudgeManager: MeetingNudgeManager = MeetingNudgeManager()) {
+    init(service: CalendarService = CalendarService(), settings: AppSettings? = nil, nudgeManager: MeetingNudgeManager? = nil) {
         self.service = service
         self.settings = settings ?? AppSettings.shared
-        self.nudgeManager = nudgeManager
+        self.nudgeManager = nudgeManager ?? MeetingNudgeManager()
         self.accessState = service.accessState
         configureTimer()
     }
