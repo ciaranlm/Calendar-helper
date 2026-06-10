@@ -18,6 +18,7 @@
 		100000000000000000000017 /* MeetingNudgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 100000000000000000000016 /* MeetingNudgeManager.swift */; };
 		100000000000000000000100 /* Calendar Pulse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Calendar Pulse.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		100000000000000000000101 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		100000000000000000000102 /* CalendarPulse.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CalendarPulse.entitlements; sourceTree = "<group>"; };
 		100000000000000000000000 /* CalendarPulseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPulseApp.swift; sourceTree = "<group>"; };
 		100000000000000000000002 /* MenuBarStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStatusView.swift; sourceTree = "<group>"; };
 		100000000000000000000004 /* CalendarPopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPopoverView.swift; sourceTree = "<group>"; };
@@ -47,6 +48,7 @@
 				100000000000000000000014 /* NotificationManager.swift */,
 				100000000000000000000016 /* MeetingNudgeManager.swift */,
 				100000000000000000000101 /* Info.plist */,
+				100000000000000000000102 /* CalendarPulse.entitlements */,
 			);
 			path = CalendarPulse;
 			sourceTree = "<group>";
@@ -128,6 +130,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = CalendarPulse/CalendarPulse.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -149,6 +152,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = CalendarPulse/CalendarPulse.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
