@@ -8,10 +8,15 @@ struct CalendarPopoverView: View {
     var body: some View {
         VStack(spacing: 0) {
             if showingSettings {
-                SettingsView(settings: settings, launchAtLoginManager: LaunchAtLoginManager()) {
-                    viewModel.settingsChanged()
-                    showingSettings = false
-                }
+                SettingsView(
+                    settings: settings,
+                    launchAtLoginManager: LaunchAtLoginManager(),
+                    doneAction: {
+                        viewModel.settingsChanged()
+                        showingSettings = false
+                    },
+                    settingsChanged: viewModel.settingsChanged
+                )
             } else {
                 scheduleView
             }
@@ -20,9 +25,6 @@ struct CalendarPopoverView: View {
         .onAppear {
             viewModel.popoverOpened()
         }
-        .onChange(of: settings.workdayStartMinutes) { _, _ in viewModel.settingsChanged() }
-        .onChange(of: settings.workdayEndMinutes) { _, _ in viewModel.settingsChanged() }
-        .onChange(of: settings.refreshIntervalSeconds) { _, _ in viewModel.settingsChanged() }
     }
 
     private var scheduleView: some View {

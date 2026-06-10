@@ -28,8 +28,13 @@ struct CalendarPulseApp: App {
         .menuBarExtraStyle(.window)
 
         Settings {
-            SettingsView(settings: settings, launchAtLoginManager: LaunchAtLoginManager()) {}
-                .frame(width: 420)
+            SettingsView(
+                settings: settings,
+                launchAtLoginManager: LaunchAtLoginManager(),
+                doneAction: {},
+                settingsChanged: viewModel.settingsChanged
+            )
+            .frame(width: 420)
         }
     }
 

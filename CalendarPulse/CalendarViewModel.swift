@@ -11,6 +11,7 @@ final class CalendarViewModel: ObservableObject {
         case loading
         case free
         case nextSoon
+        case nudging
         case busy
         case done
         case noAccess
@@ -36,21 +37,31 @@ final class CalendarViewModel: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var errorMessage: String?
     @Published private(set) var lastRefreshDate: Date?
+    @Published private(set) var isNudgeAnimating = false
 
     private let service: CalendarService
     private let settings: AppSettings
+    private let nudgeManager: MeetingNudgeManager
     private var timer: Timer?
+    private var nudgeStatusOverride: Status?
+    private var nudgeAnimationTask: Task<Void, Never>?
 
-    init(service: CalendarService = CalendarService(), settings: AppSettings? = nil) {
+    init(service: CalendarService = CalendarService(), settings: AppSettings? = nil, nudgeManager: MeetingNudgeManager = MeetingNudgeManager()) {
         self.service = service
         self.settings = settings ?? AppSettings.shared
+        self.nudgeManager = nudgeManager
         self.accessState = service.accessState
         configureTimer()
     }
 
     func start() {
         configureTimer()
-        Task { await refresh(requestPermission: true) }
+        Task {
+            if settings.meetingNudgesEnabled {
+                _ = await nudgeManager.requestNotificationPermissionIfNeeded()
+            }
+            await refresh(requestPermission: true)
+        }
     }
 
     func popoverOpened() {
@@ -85,7 +96,9 @@ final class CalendarViewModel: ObservableObject {
             let snapshot = try service.fetchToday()
             timedEvents = snapshot.timedEvents
             allDayEvents = snapshot.allDayEvents
-            recalculate(now: Date())
+            let now = Date()
+            recalculate(now: now)
+            await checkMeetingNudge(now: now)
             lastRefreshDate = Date()
         } catch {
             clearSchedule()
@@ -105,7 +118,14 @@ final class CalendarViewModel: ObservableObject {
 
     func settingsChanged() {
         configureTimer()
-        recalculate(now: Date())
+        let now = Date()
+        recalculate(now: now)
+        Task {
+            if settings.meetingNudgesEnabled {
+                _ = await nudgeManager.requestNotificationPermissionIfNeeded()
+            }
+            await checkMeetingNudge(now: now)
+        }
     }
 
     func openCalendar() {
@@ -152,7 +172,42 @@ final class CalendarViewModel: ObservableObject {
         currentEvent = timedEvents.first { $0.startDate <= now && now < $0.endDate }
         nextEvent = timedEvents.first { $0.startDate > now }
         freeBlocks = calculateFreeBlocks(now: now)
-        status = calculateStatus(now: now)
+        status = nudgeStatusOverride ?? calculateStatus(now: now)
+    }
+
+
+    private func checkMeetingNudge(now: Date) async {
+        let didTrigger = await nudgeManager.check(nextEvent: nextEvent, now: now, settings: settings)
+        if didTrigger, let nextEvent {
+            showNudgeStatus(for: nextEvent)
+        }
+    }
+
+    private func showNudgeStatus(for event: CalendarEvent) {
+        nudgeAnimationTask?.cancel()
+
+        let menuText = settings.showEventTitlesInMenuBar ? "1m: \(event.title)" : "Starting soon"
+        let nudgeTitle = settings.nudgeTimeMinutes == 1
+            ? "Meeting starts in 1 minute"
+            : "Meeting starts in \(settings.nudgeTimeMinutes) minutes"
+        nudgeStatusOverride = Status(
+            kind: .nudging,
+            menuText: menuText,
+            title: nudgeTitle,
+            detail: "\(event.title) starts at \(DateFormatter.pulseTimeFormatter.string(from: event.startDate))",
+            color: .orange,
+            symbolName: "bell.fill"
+        )
+        isNudgeAnimating = true
+        status = nudgeStatusOverride ?? status
+
+        nudgeAnimationTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(5))
+            guard !Task.isCancelled else { return }
+            self?.nudgeStatusOverride = nil
+            self?.isNudgeAnimating = false
+            self?.recalculate(now: Date())
+        }
     }
 
     private func calculateStatus(now: Date) -> Status {

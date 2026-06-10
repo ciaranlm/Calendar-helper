@@ -4,6 +4,7 @@ struct SettingsView: View {
     @ObservedObject var settings: AppSettings
     @ObservedObject var launchAtLoginManager: LaunchAtLoginManager
     let doneAction: () -> Void
+    var settingsChanged: () -> Void = {}
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -39,6 +40,20 @@ struct SettingsView: View {
                 Toggle("Include all-day events in list", isOn: $settings.includeAllDayEventsInList)
                 Toggle("Show event titles in menu bar", isOn: $settings.showEventTitlesInMenuBar)
 
+                Section("Meeting nudges") {
+                    Toggle("Meeting nudges", isOn: $settings.meetingNudgesEnabled)
+
+                    Picker("Nudge time", selection: $settings.nudgeTimeMinutes) {
+                        ForEach(NudgeTime.allCases) { nudgeTime in
+                            Text(nudgeTime.title).tag(nudgeTime.rawValue)
+                        }
+                    }
+                    .disabled(!settings.meetingNudgesEnabled)
+
+                    Toggle("Play sound", isOn: $settings.playNudgeSound)
+                        .disabled(!settings.meetingNudgesEnabled)
+                }
+
                 Toggle(
                     "Launch at login",
                     isOn: Binding(
@@ -66,5 +81,13 @@ struct SettingsView: View {
         .frame(width: 360)
         .frame(minHeight: 360)
         .onAppear { launchAtLoginManager.refresh() }
+        .onChange(of: settings.workdayStartMinutes) { _, _ in settingsChanged() }
+        .onChange(of: settings.workdayEndMinutes) { _, _ in settingsChanged() }
+        .onChange(of: settings.includeAllDayEventsInList) { _, _ in settingsChanged() }
+        .onChange(of: settings.showEventTitlesInMenuBar) { _, _ in settingsChanged() }
+        .onChange(of: settings.refreshIntervalSeconds) { _, _ in settingsChanged() }
+        .onChange(of: settings.meetingNudgesEnabled) { _, _ in settingsChanged() }
+        .onChange(of: settings.nudgeTimeMinutes) { _, _ in settingsChanged() }
+        .onChange(of: settings.playNudgeSound) { _, _ in settingsChanged() }
     }
 }
