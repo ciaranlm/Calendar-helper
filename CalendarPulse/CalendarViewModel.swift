@@ -41,9 +41,9 @@ final class CalendarViewModel: ObservableObject {
     private let settings: AppSettings
     private var timer: Timer?
 
-    init(service: CalendarService = CalendarService(), settings: AppSettings = .shared) {
+    init(service: CalendarService = CalendarService(), settings: AppSettings? = nil) {
         self.service = service
-        self.settings = settings
+        self.settings = settings ?? AppSettings.shared
         self.accessState = service.accessState
         configureTimer()
     }
