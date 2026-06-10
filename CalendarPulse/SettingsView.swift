@@ -63,7 +63,8 @@ struct SettingsView: View {
             }
         }
         .padding(16)
-        .frame(width: 360, minHeight: 360)
+        .frame(width: 360)
+        .frame(minHeight: 360)
         .onAppear { launchAtLoginManager.refresh() }
     }
 }
