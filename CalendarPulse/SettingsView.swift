@@ -54,6 +54,7 @@ struct SettingsView: View {
                 }
             }
             .formStyle(.grouped)
+            .frame(minHeight: 260)
 
             if let errorMessage = launchAtLoginManager.errorMessage {
                 Label(errorMessage, systemImage: "exclamationmark.triangle")
@@ -62,7 +63,7 @@ struct SettingsView: View {
             }
         }
         .padding(16)
-        .frame(width: 360)
+        .frame(width: 360, minHeight: 360)
         .onAppear { launchAtLoginManager.refresh() }
     }
 }
